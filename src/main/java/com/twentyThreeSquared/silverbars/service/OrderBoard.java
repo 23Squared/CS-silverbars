@@ -1,5 +1,9 @@
 package com.twentyThreeSquared.silverbars.service;
 
+import com.twentyThreeSquared.silverbars.dto.OrderDto;
+import com.twentyThreeSquared.silverbars.persistence.Database;
+import com.twentyThreeSquared.silverbars.persistence.entity.Order;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -7,10 +11,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import com.twentyThreeSquared.silverbars.dto.OrderDto;
-import com.twentyThreeSquared.silverbars.persistence.Database;
-import com.twentyThreeSquared.silverbars.persistence.entity.Order;
 
 import static com.twentyThreeSquared.silverbars.persistence.entity.Order.OrderType.BUY;
 import static com.twentyThreeSquared.silverbars.persistence.entity.Order.OrderType.SELL;
@@ -40,6 +40,9 @@ public class OrderBoard {
 
         orders.forEach((price, ordersAtPrice) -> {
 
+            // TODO - feel like this could be made neater, possibly
+            // TODO - combined into one stream function
+
             // BUY and SELL orders need to be aggregated separately
             List<Order> sellOrders = ordersAtPrice.values().stream()
                     .filter(order -> SELL.equals(order.getOrderType()))
@@ -66,7 +69,7 @@ public class OrderBoard {
     private OrderDto aggregateOrders(Collection<Order> orders, int price) {
         OrderDto.Builder orderDtoBuilder = new OrderDto.Builder().withPrice(price);
 
-        orders.stream().forEach(sellOrder -> orderDtoBuilder
+        orders.forEach(sellOrder -> orderDtoBuilder
                         .addOrderId(sellOrder.getOrderId())
                         .addQuantity(sellOrder.getQuantity())
                         .withOrderType(sellOrder.getOrderType()));

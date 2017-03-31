@@ -1,12 +1,12 @@
 package com.twentyThreeSquared.silverbars.persistence;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.UUID;
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.twentyThreeSquared.silverbars.persistence.entity.Order;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.UUID;
 
 public class PersistentStorage implements Database {
 
@@ -33,6 +33,9 @@ public class PersistentStorage implements Database {
     }
 
     public void delete(UUID orderId) {
+
+        // TODO - Think there might be a way to store data so that it's
+        // TODO - indexed and available via id or price
         int price = get(orderId).getGbpPerKilogram();
         store.remove(price, orderId);
     }

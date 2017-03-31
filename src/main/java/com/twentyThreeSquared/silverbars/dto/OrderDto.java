@@ -1,10 +1,11 @@
 package com.twentyThreeSquared.silverbars.dto;
 
+import com.twentyThreeSquared.silverbars.persistence.entity.Order;
+import org.apache.commons.lang3.builder.CompareToBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import com.twentyThreeSquared.silverbars.persistence.entity.Order;
 
 import static com.twentyThreeSquared.silverbars.persistence.entity.Order.OrderType.BUY;
 import static com.twentyThreeSquared.silverbars.persistence.entity.Order.OrderType.SELL;
@@ -69,31 +70,18 @@ public class OrderDto implements Comparable<OrderDto> {
 
     @Override
     public int compareTo(OrderDto o) {
-        if(this.equals(o)) {
-            return 0;
-        } else if(this.orderType.equals(SELL) && o.getOrderType().equals(SELL)) {
+        CompareToBuilder compareToBuilder = new CompareToBuilder()
+                .append(o.getOrderType(), this.getOrderType());
+
+        if(this.getOrderType().equals(SELL) && o.getOrderType().equals(SELL)) {
             // Both SELL orders, order by price lowest to highest
-            if(this.getPrice() > o.getPrice()) {
-                return 1;
-            } else {
-                return -1;
-            }
-        } else if(this.orderType.equals(BUY) && o.getOrderType().equals(BUY)) {
+            compareToBuilder.append(this.getPrice(), o.getPrice());
+        } else if(this.getOrderType().equals(BUY) && o.getOrderType().equals(BUY)) {
             // Both BUY orders, order by price highest to lowest
-            if(this.getPrice() > o.getPrice()) {
-                return -1;
-            } else {
-                return 1;
-            }
-        } else if(this.orderType.equals(BUY) && o.getOrderType().equals(SELL)) {
-            // SELL orders come first
-            return 1;
-        } else if(this.orderType.equals(SELL) && o.getOrderType().equals(BUY)) {
-            // SELL orders come first
-            return -1;
+            compareToBuilder.append(o.getPrice(), this.getPrice());
         }
 
-        return 0;
+        return compareToBuilder.toComparison();
     }
 
     public static class Builder {
