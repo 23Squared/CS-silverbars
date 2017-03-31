@@ -33,7 +33,6 @@ public class PersistentStorage implements Database {
     }
 
     public void delete(UUID orderId) {
-
         // TODO - Think there might be a way to store data so that it's
         // TODO - indexed and available via id or price
         int price = get(orderId).getGbpPerKilogram();

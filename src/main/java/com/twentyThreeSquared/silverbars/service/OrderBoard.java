@@ -10,10 +10,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.twentyThreeSquared.silverbars.persistence.entity.Order.OrderType.BUY;
-import static com.twentyThreeSquared.silverbars.persistence.entity.Order.OrderType.SELL;
 
 public class OrderBoard {
 
@@ -38,25 +38,19 @@ public class OrderBoard {
         Map<Integer, Map<UUID, Order>> orders = database.getAll();
         Set<OrderDto> orderBoard = new TreeSet<>();
 
+        Predicate<Order> isBuyOrder = order -> order.getOrderType().equals(BUY);
+
         orders.forEach((price, ordersAtPrice) -> {
+            Map<Boolean, List<Order>> partitionedOrders = ordersAtPrice.values().stream()
+                    .collect(Collectors.partitioningBy(isBuyOrder));
 
-            // TODO - feel like this could be made neater, possibly
-            // TODO - combined into one stream function
-
-            // BUY and SELL orders need to be aggregated separately
-            List<Order> sellOrders = ordersAtPrice.values().stream()
-                    .filter(order -> SELL.equals(order.getOrderType()))
-                    .collect(Collectors.toList());
-
+            List<Order> sellOrders = partitionedOrders.get(true);
             if(!sellOrders.isEmpty()) {
                 OrderDto orderDto = aggregateOrders(sellOrders, price);
                 orderBoard.add(orderDto);
             }
 
-            List<Order> buyOrders = ordersAtPrice.values().stream()
-                    .filter(order -> BUY.equals(order.getOrderType()))
-                    .collect(Collectors.toList());
-
+            List<Order> buyOrders = partitionedOrders.get(false);
             if(!buyOrders.isEmpty()) {
                 OrderDto orderDto = aggregateOrders(buyOrders, price);
                 orderBoard.add(orderDto);

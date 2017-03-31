@@ -2,6 +2,8 @@ package com.twentyThreeSquared.silverbars.dto;
 
 import com.twentyThreeSquared.silverbars.persistence.entity.Order;
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +52,7 @@ public class OrderDto implements Comparable<OrderDto> {
 
         OrderDto orderDto = (OrderDto) o;
 
-        return new org.apache.commons.lang3.builder.EqualsBuilder()
+        return new EqualsBuilder()
                 .append(quantity, orderDto.quantity)
                 .append(price, orderDto.price)
                 .append(orderIds, orderDto.orderIds)
@@ -60,7 +62,7 @@ public class OrderDto implements Comparable<OrderDto> {
 
     @Override
     public int hashCode() {
-        return new org.apache.commons.lang3.builder.HashCodeBuilder(17, 37)
+        return new HashCodeBuilder(17, 37)
                 .append(quantity)
                 .append(price)
                 .append(orderIds)
@@ -70,6 +72,7 @@ public class OrderDto implements Comparable<OrderDto> {
 
     @Override
     public int compareTo(OrderDto o) {
+        // SELL orders come before buy orders
         CompareToBuilder compareToBuilder = new CompareToBuilder()
                 .append(o.getOrderType(), this.getOrderType());
 
