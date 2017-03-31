@@ -1,8 +1,8 @@
 package com.twentyThreeSquared.silverbars.dto;
 
-import java.util.UUID;
-
 import org.junit.Test;
+
+import java.util.UUID;
 
 import static com.twentyThreeSquared.silverbars.persistence.entity.Order.OrderType.BUY;
 import static com.twentyThreeSquared.silverbars.persistence.entity.Order.OrderType.SELL;
@@ -41,8 +41,8 @@ public class OrderDtoTest {
         OrderDto sellOrderDto = getBasicOrderDtoBuilder().withOrderType(SELL).withPrice(100).build();
         OrderDto buyOrderDto = getBasicOrderDtoBuilder().withOrderType(BUY).withPrice(100).build();
 
-        assertThat(sellOrderDto.compareTo(buyOrderDto)).isEqualTo(-1);
-        assertThat(buyOrderDto.compareTo(sellOrderDto)).isEqualTo(1);
+        assertThat(sellOrderDto.compareTo(buyOrderDto)).isNegative();
+        assertThat(buyOrderDto.compareTo(sellOrderDto)).isPositive();
     }
 
     @Test
@@ -50,8 +50,8 @@ public class OrderDtoTest {
         OrderDto firstOrderDto = getBasicOrderDtoBuilder().withOrderType(SELL).withPrice(100).build();
         OrderDto secondOrderDto = getBasicOrderDtoBuilder().withOrderType(SELL).withPrice(200).build();
 
-        assertThat(firstOrderDto.compareTo(secondOrderDto)).isEqualTo(-1);
-        assertThat(secondOrderDto.compareTo(firstOrderDto)).isEqualTo(1);
+        assertThat(firstOrderDto.compareTo(secondOrderDto)).isNegative();
+        assertThat(secondOrderDto.compareTo(firstOrderDto)).isPositive();
     }
 
     @Test
@@ -59,8 +59,8 @@ public class OrderDtoTest {
         OrderDto firstOrderDto = getBasicOrderDtoBuilder().withOrderType(BUY).withPrice(200).build();
         OrderDto secondOrderDto = getBasicOrderDtoBuilder().withOrderType(BUY).withPrice(100).build();
 
-        assertThat(firstOrderDto.compareTo(secondOrderDto)).isEqualTo(-1);
-        assertThat(secondOrderDto.compareTo(firstOrderDto)).isEqualTo(1);
+        assertThat(firstOrderDto.compareTo(secondOrderDto)).isNegative();
+        assertThat(secondOrderDto.compareTo(firstOrderDto)).isPositive();
     }
 
     @Test
