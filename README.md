@@ -1,0 +1,3 @@
+# silverbars
+
+## One of those programming test thingys...buying and selling of silver...bars...
